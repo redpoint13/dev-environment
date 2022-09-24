@@ -1,2 +1,11 @@
 nose
 sphinx
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib
+# environment packages
+virtualenv
+pip-tools
+pipenv
+poetry
+
