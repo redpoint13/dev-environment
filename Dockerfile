@@ -2,11 +2,8 @@ FROM ubuntu:22.04
 
 SHELL [ "/bin/bash", "-c" ]
 
-ARG PYTHON_VERSION_TAG=3.8
-ARG LINK_PYTHON_TO_PYTHON3=1
-
-RUN apt-get update && apt-get install -y software-properties-common gcc && \
-    add-apt-repository -y ppa:deadsnakes/ppa
+# ARG PYTHON_VERSION_TAG=3.8
+# ARG LINK_PYTHON_TO_PYTHON3=1
 
 RUN apt-get -qq -y update && \
     DEBIAN_FRONTEND=noninteractive apt-get -qq -y install \
@@ -19,17 +16,18 @@ RUN apt-get -qq -y update && \
         sudo \
         bash-completion \
         tree \
-        software-properties-common
+        software-properties-common && \
+        apt-get update && \
+        apt-get -y autoclean && \
+        apt-get -y autoremove && \
+        rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && \
-    apt-get install -y python3.8 python3-distutils python3-pip python3-apt \
-    apt-get -y autoclean && \
-    apt-get -y autoremove && \
-    rm -rf /var/lib/apt/lists/*
-
-# COPY install_python.sh install_python.sh
-# RUN bash install_python.sh ${PYTHON_VERSION_TAG} ${LINK_PYTHON_TO_PYTHON3} && \
-#     rm -r install_python.sh Python-${PYTHON_VERSION_TAG}
+# Install Minicond
+RUN wget \
+    https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+    && mkdir /root/.conda \
+    && bash Miniconda3-latest-Linux-x86_64.sh -b \
+    && rm -f Miniconda3-latest-Linux-x86_64.sh 
 
 # Enable tab completion by uncommenting it from /etc/bash.bashrc
 # The relevant lines are those below the phrase "enable bash completion in interactive shells"
